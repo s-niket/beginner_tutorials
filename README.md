@@ -47,3 +47,4 @@ catkin_make
 source devel/setup.bash
 rosrun beginner_tutorials listener
 ```
+Press Ctrl+C in each terminal to stop the execution
