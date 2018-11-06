@@ -1,3 +1,6 @@
 Done processing src/listener.cpp
+src/talker.cpp:46:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::updateOutputText::Request& request  [runtime/references] [2]
+src/talker.cpp:47:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::updateOutputText::Response& response  [runtime/references] [2]
 Done processing src/talker.cpp
+Total errors found: 2
 
