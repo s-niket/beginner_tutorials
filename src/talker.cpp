@@ -41,7 +41,12 @@
 #include "std_msgs/String.h"
 #include "beginner_tutorials/updateOutputText.h"
 
+extern std::string originalMessage = "Hello ROS ";
 
+/**
+ * Created function to add the service of adding custom message.
+ * We create Request and Response objects defined in the srv file.
+ */
 bool UpdateOutputText(
     beginner_tutorials::updateOutputText::Request& request,
     beginner_tutorials::updateOutputText::Response& response) {
@@ -56,7 +61,7 @@ bool UpdateOutputText(
  * This tutorial demonstrates simple sending of messages over the ROS system.
  */
 int main(int argc, char **argv) {
-  std::string originalMessage = "Hello ROS ";
+
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
    * any ROS arguments and name remapping that were provided at the command line.
@@ -107,6 +112,9 @@ int main(int argc, char **argv) {
   ros::Rate loop_rate(frequency);
   ROS_DEBUG_STREAM("User input frequency is: " << frequency);
 
+  /*
+   * This function is to demonstrate uses of different logger levels
+   */
   if (frequency < 0) {
     ROS_FATAL_STREAM("The input frequency is invalid");
     frequency = 5;
