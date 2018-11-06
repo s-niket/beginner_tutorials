@@ -39,7 +39,20 @@
 #include <sstream>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "beginner_tutorials/updateOutputText.h"
 
+std::string originalMessage = "Hello ROS ";
+
+bool UpdateOutputText(
+    beginner_tutorials::updateOutputText::Request& request,
+    beginner_tutorials::updateOutputText::Response& response) {
+
+  originalMessage = request.inputString;
+  response.updatedString = "User modified the original string to: "
+      + request.inputString;
+  ROS_WARN_STREAM("User modified the message");
+  return true;
+}
 /**
  * This tutorial demonstrates simple sending of messages over the ROS system.
  */
@@ -55,6 +68,11 @@ int main(int argc, char **argv) {
    * part of the ROS system.
    */
   ros::init(argc, argv, "talker");
+
+  int frequency = 5;
+
+  if (argc >= 2)
+    int frequency = atoi(argv[1]);
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
@@ -82,8 +100,21 @@ int main(int argc, char **argv) {
    */
   ros::Publisher chatter_pub = n.advertise < std_msgs::String
       > ("chatter", 1000);
+  ros::ServiceServer server = n.advertiseService("updateText",
+                                                 UpdateOutputText);
 
-  ros::Rate loop_rate(10);
+
+  ros::Rate loop_rate(frequency);
+  ROS_DEBUG_STREAM("User input frequency is: " << frequency);
+
+  if (frequency < 0) {
+    ROS_FATAL_STREAM("The input frequency is invalid");
+    frequency = 5;
+  } else if (frequency == 0) {
+    ROS_ERROR_STREAM("Input frequency cannot be 0");
+    frequency = 5;
+  }
+
 
   /**
    * A count of how many messages we have sent. This is used to create
@@ -97,7 +128,7 @@ int main(int argc, char **argv) {
     std_msgs::String msg;
 
     std::stringstream ss;
-    ss << "Go Terps! " << count;
+    ss << originalMessage << count;
     msg.data = ss.str();
 
     ROS_INFO("%s", msg.data.c_str());
