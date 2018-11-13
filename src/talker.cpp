@@ -40,8 +40,10 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "beginner_tutorials/updateOutputText.h"
+#include <tf/transform_broadcaster.h>
+#include <cstdlib>
 
-std::string originalMessage = "Hello ROS ";
+std::string originalMessage = "Hello ROS";
 
 /**
  * @brief: Function to add the service of adding custom message.
@@ -52,8 +54,7 @@ bool UpdateOutputText(
     beginner_tutorials::updateOutputText::Response& response) {
 
   originalMessage = request.inputString;
-  response.updatedString = "User modified the original string to: "
-      + request.inputString;
+  response.updatedString = request.inputString;
   ROS_WARN_STREAM("User modified the message");
   return true;
 }
@@ -73,6 +74,10 @@ int main(int argc, char **argv) {
    * part of the ROS system.
    */
   ros::init(argc, argv, "talker");
+
+  //transform broadcaster object
+  static tf::TransformBroadcaster br;
+  tf::Transform transform;
 
   int frequency = 5;
 
@@ -140,7 +145,6 @@ int main(int argc, char **argv) {
     msg.data = ss.str();
 
     ROS_INFO("%s", msg.data.c_str());
-
     /**
      * The publish() function is how you send messages. The parameter
      * is the message object. The type of this object must agree with the type
@@ -148,6 +152,15 @@ int main(int argc, char **argv) {
      * in the constructor above.
      */
     chatter_pub.publish(msg);
+
+    transform.setOrigin(tf::Vector3(rand() % 100, rand() % 100, rand() % 100));
+    tf::Quaternion q;
+    q.setRPY(0, 0, 1);
+    transform.setRotation(q);
+    br.sendTransform(
+        tf::StampedTransform(transform, ros::Time::now(), "world", "talker"));
+
+
 
     ros::spinOnce();
 
