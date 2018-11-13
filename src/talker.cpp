@@ -41,11 +41,11 @@
 #include "std_msgs/String.h"
 #include "beginner_tutorials/updateOutputText.h"
 
-extern std::string originalMessage = "Hello ROS ";
+std::string originalMessage = "Hello ROS ";
 
 /**
- * Created function to add the service of adding custom message.
- * We create Request and Response objects defined in the srv file.
+ * @brief: Function to add the service of adding custom message.
+ * @return : bool value, indicating execution of the function as successful
  */
 bool UpdateOutputText(
     beginner_tutorials::updateOutputText::Request& request,
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
   int frequency = 5;
 
   if (argc >= 2)
-    int frequency = atoi(argv[1]);
+     frequency = atoi(argv[1]);
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
