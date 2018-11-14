@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(beginner_tutorials)
 
 ## For compiling C++11 functions
-## add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and any catkin packages
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation genmsg tf)
