@@ -36,14 +36,15 @@
  * @brief Implementation of a ROS publisher from ROS
  *        beginner tutorials
  */
-#include <sstream>
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-#include "beginner_tutorials/updateOutputText.h"
 #include <tf/transform_broadcaster.h>
 #include <cstdlib>
+#include <sstream>
+#include "beginner_tutorials/updateOutputText.h"
+#include "ros/ros.h"
+#include "std_msgs/String.h"
 
 std::string originalMessage = "Hello ROS";
+
 
 /**
  * @brief: Function to add the service of adding custom message.
@@ -62,7 +63,6 @@ bool UpdateOutputText(
  * This tutorial demonstrates simple sending of messages over the ROS system.
  */
 int main(int argc, char **argv) {
-
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
    * any ROS arguments and name remapping that were provided at the command line.
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
    */
   ros::init(argc, argv, "talker");
 
-  //transform broadcaster object
+  // transform broadcaster object
   static tf::TransformBroadcaster br;
   tf::Transform transform;
 
@@ -127,7 +127,8 @@ int main(int argc, char **argv) {
     ROS_ERROR_STREAM("Input frequency cannot be 0");
     frequency = 5;
   }
-
+  // For using rand_r() to have effecient multi-threading
+  unsigned int seed = time(NULL);
 
   /**
    * A count of how many messages we have sent. This is used to create
@@ -153,7 +154,9 @@ int main(int argc, char **argv) {
      */
     chatter_pub.publish(msg);
 
-    transform.setOrigin(tf::Vector3(rand() % 100, rand() % 100, rand() % 100));
+    transform.setOrigin(
+        tf::Vector3(rand_r(&seed) % 100, rand_r(&seed) % 100,
+                    rand_r(&seed) % 100));
     tf::Quaternion q;
     q.setRPY(0, 0, 1);
     transform.setRotation(q);
